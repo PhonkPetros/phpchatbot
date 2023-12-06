@@ -1,29 +1,43 @@
 <?php
 
 class User {
-    private $db;
+    
+    private string $username;
+    private string $password;
+    private string $role;
+    private int $query_count;
 
-    public function __construct($db) {
-        $this->db = $db;
+
+    public function getUsername() {
+        return $this->username;
     }
 
-    public function login($username, $password) {
-        $username = filter_var($username);
-        $password = filter_var($password);
+    public function setUsername($username) {
+        $this->username = filter_var($username);
+    }
 
-        $pdo = $this->db->getConn();
-        $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = :username");
-        
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    public function getPassword() {
+        return $this->password;
+    }
 
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    public function setPassword($password) {
+        $this->password = $password;
+    }
 
-        if ($user && password_verify($password, $user['password'])) {
-            return $user;
-        } else {
-            return false;
-        }
+    public function getRole() {
+        return $this->role;
+    }
+
+    public function setRole($role) {
+        $this->role = filter_var($role);
+    }
+
+    public function getQueryCount() {
+        return $this->query_count;
+    }
+
+    public function setQueryCount($query_count) {
+        $this->query_count = filter_var($query_count, FILTER_SANITIZE_NUMBER_INT);
     }
 }
 

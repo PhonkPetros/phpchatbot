@@ -1,35 +1,35 @@
 <?php
-
-require_once 'database.php';
+require_once './repositories/UserRepository.php';
 
 class Users {
-    private $db; 
-
+    private $userRepo;
 
     public function __construct() {
-        $this->db = new Database();
+        $this->userRepo = new UserRepository();
     }
 
-    public function register($username, $password, $confirmPassword) {
+    public function register(User $user) {
 
-        if ($password !== $confirmPassword) {
+        $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+        $user->setPassword($hashedPassword);
+    
+        return $this->userRepo->registerUser($user->getUsername(), $user->getPassword());
+    }
+    
+
+    public function loginEmployee($username, $password) {
+        if ($username && $password == null){
             return false;
         }
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $user = $this->userRepo->getUserByUsername($username);
 
-        $sql = "INSERT INTO users (username, password, role) VALUES (?, ?, 'User')";
-        $params = [$username, $hashedPassword];
-
-        $stmt = $this->db->executeQuery($sql, $params);
-
-        if ($stmt) {
-            header("Location: index.php");
-            return true;
-            exit;
-        } else {
-            echo "Registration False";
-            return false;
+        if ($user && password_verify($password, $user['password'])) {
+            if ($user['role'] == 'Administrator' || $user['role'] == 'User') {
+                return $user;
+            }
         }
+
+        return false;
     }
 }
 

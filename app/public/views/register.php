@@ -1,20 +1,31 @@
 <?php
-require_once 'database.php';
 require_once './controllers/Users.php';
+require_once './models/User.php';
+
 
 $error = 'Password is not the same';
-
 
 $result = true;
 
 $users = new Users();
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
-    $password = $_POST['password-input'];
-    $confirmPassword = $_POST['confirm-password-input'];
+    $password = $_POST['password_input'];
+    $confirmPassword = $_POST['confirm_password_input'];
 
-    $result = $users->register($username, $password, $confirmPassword);
+    if ($password != $confirmPassword) {
+        $error = 'Passwords do not match';
+        $result = false;
+    } else {
+        $user = new User();
+        $user->setUsername($username);
+        $user->setPassword($password);
+
+        $result = $users->register($user); 
+        header('Location: ./');
+    }
 }
 
 ?>
@@ -40,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Login</a>
+                <a class="nav-link" href="/">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="register.php">Register</a>
+                <a class="nav-link" href="register">Register</a>
             </li>
         </ul>
     </div>
@@ -56,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="card">
                         <div class="card-header">Register</div>
                         <div class="card-body">
-                            <form name="my-form" onsubmit="return validform()" method="POST">
+                        <form name="my-form" action="register" onsubmit="return validform()" method="POST">
                                 <div class="form-group row">
                                     <label for="user_name" class="col-md-4 col-form-label text-md-right">User Name</label>
                                     <div class="col-md-6">
@@ -67,14 +78,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="form-group row">
                                     <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
                                     <div class="col-md-6">
-                                        <input type="password" id="password" class="form-control" name="password-input">
+                                        <input type="password" id="password" class="form-control" name="password_input">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="password" class="col-md-4 col-form-label text-md-right">Confirm password</label>
                                     <div class="col-md-6">
-                                        <input type="password" id="password" class="form-control" name="confirm-password-input">
+                                        <input type="password" id="password" class="form-control" name="confirm_password_input">
                                     </div>
                                 </div>
                                     <div class="col-md-6 offset-md-4">
