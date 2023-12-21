@@ -15,11 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user = $userModel->loginEmployee($username, $password);
 
-    if ($user) {
+    if ($user != null) {
         session_start();
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
-        $error = "Valid username and password";
+        $_SESSION['role'] = $user['role'];
+        header('Location: /chat');
         exit;
     } else {
         $error = "Invalid username or password";

@@ -1,0 +1,25 @@
+.form-control{
+    margin-top: 10px;
+   
+}
+
+.btn-outline-secondary{
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.input-box{
+    height: 600px;
+    border: 1px solid black;
+}
+.admin-button {
+    border: none;
+    background: none;
+  }
+
+.logout-button{
+    border: none;
+    background: none;
+}
+
+  
