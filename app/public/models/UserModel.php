@@ -1,11 +1,11 @@
 <?php
 
-class User {
+class UserModel {
     
-    private string $username;
-    private string $password;
-    private string $role;
-    private int $query_count;
+    protected string $username;
+    protected string $password;
+    protected string $role;
+    protected int $query_count;
 
 
     public function getUsername() {
@@ -29,7 +29,7 @@ class User {
     }
 
     public function setRole($role) {
-        $this->role = filter_var($role);
+        $this->role = 'User';
     }
 
     public function getQueryCount() {
